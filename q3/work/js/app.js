@@ -12,10 +12,6 @@ $(function() {
     $('.drawer_button').toggleClass('active');
     //navのメニュー部分を表示したいので、openのクラスを追加
     $('.drawer_nav_wrapper').toggleClass('open');
-    //変数に文字列を代入
-    const result = "メニューを表示・非表示に変更しました";
-    //コンソールに変数の文字列を出力
-    console.log(result);
   });
   //背景(orボタン)をクリックするとイベント発生
   $('.drawer_bg').on('click',function() {

@@ -14,9 +14,5 @@ $(function() {
     $('.description li').eq(i).removeClass('is-hidden');
     /*※上から順に作動しているため、
     addClassとremoveClassを逆に記載すると目的通りに動作しないため注意*/
-    //変数に文字列を代入
-    const result = "タブが切り替わりました";
-    //コンソールに変数の文字列を出力
-    console.log(result);
   });
 });

@@ -7,21 +7,10 @@ $(function() {
     ※ :not(:animated)がないと、
     アニメーション途中でもマウスをホバーした回数分実行が繰り返されるので、
     マウスを離した後も回数分ずっと動いてしまう*/
-    $('ul:not(:animated)', this).slideDown(function() {
-      /*変数に文字列を代入
-      slideDownのイベントとして入れることで動きが終わった後に表示させる*/
-      const result = "マウスがホバーしました";
-      //コンソールに変数の文字列を出力
-      console.log(result);
-    });
+    $('ul:not(:animated)', this).stop().slideDown()
   //dropdwnのリスト(A,B,C,D)にマウスが乗っていないとき
   }, function() {
     //dropdwn_menu(ul)を上にスライドさせる
-    $('ul.dropdwn_menu', this).slideUp(function() {
-      //変数に文字列を代入
-      const result = "マウスが離れました";
-      //コンソールに変数の文字列を出力
-      console.log(result);
-    });
+    $('ul.dropdwn_menu', this).stop().slideUp()
   });
 });

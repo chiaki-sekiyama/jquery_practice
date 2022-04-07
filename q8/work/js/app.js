@@ -46,8 +46,6 @@ $(function() {
       const result = response['@graph'];
       //コールバックdisplayResult（function displayResult(data)以下略）を発動！
       displayResult(result);
-      //配列が見たほうがやりやすかったのでコンソールに出力できるように記載しました
-      console.log(result);
       ////.failが通信に失敗した時の処理、”err”にサーバーから送られてきたエラー内容を受け取っている
     }).fail(function (err) {
       //コールバック関数displayError（function displayError(error)以下略）を発動！

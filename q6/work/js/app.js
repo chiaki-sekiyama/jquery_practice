@@ -5,8 +5,6 @@ $(function() {
   $('.select-box').on('change',function() {
     //セレクトボックスのオプション：valueを取得し、変数に代入
     var select = $('.select-box option:selected').val();
-    //コンソールに代入された値と文字列を出力
-    console.log(select + "を選びました");
     //li要素それぞれに繰り返し処理をする→each()
     $('.food-list li').each(function() {
       //セレクトボックスで選んだvalueとcategory-typeが一致したとき
