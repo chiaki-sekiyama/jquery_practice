@@ -7,10 +7,15 @@ $(function() {
     ※ :not(:animated)がないと、
     アニメーション途中でもマウスをホバーした回数分実行が繰り返されるので、
     マウスを離した後も回数分ずっと動いてしまう*/
-    $('ul:not(:animated)', this).stop().slideDown()
+    /* :not(:animated)はアニメーション中ではない時に処理をうけつけること
+    対してstop()は現在実行しているアニメーションをすぐに停止すること、そのあとのイベントで動きを再開する
+    $(this)だけだと、.dropdwn li をスライドアップダウンしてしまうので、
+    子要素をchildren('ul')にして、
+    クリックした.dropdwn liより下の階層のulを指定できる*/
+    $(this).children('ul').stop().slideDown()
   //dropdwnのリスト(A,B,C,D)にマウスが乗っていないとき
   }, function() {
     //dropdwn_menu(ul)を上にスライドさせる
-    $('ul.dropdwn_menu', this).stop().slideUp()
+    $(this).children('ul').stop().slideUp()
   });
 });
