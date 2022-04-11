@@ -14,13 +14,13 @@ $(function() {
   //ページカウントの初期値を１に設定
   let pageCount = 1;
   //変数valuelogに前の検索ワードを格納、初期値は空に設定
-  let valuelog = "";
+  let searchLog = "";
   //検索ボタンを押したらイベント発生
   $('.search-btn').on('click',function() {
     //関数searchWordにフォーム入力された値を入れる
-    let searchWord = $('#search-input').val();
+    const searchWord = $('#search-input').val();
     //もし前の検索ワードと今入力された値が同じだったら
-    if (searchWord === valuelog) {
+    if (searchWord === searchLog) {
       //ページカウントを+1にする
       pageCount = pageCount + 1;
       //それ以外（同じじゃない場合）は
@@ -30,7 +30,7 @@ $(function() {
       //ページカウントを１に戻す
       pageCount = 1;
       //今入力した値を前の値として格納
-      valuelog = searchWord;
+      searchLog = searchWord;
     };
     //変数settingsにajaxの設定情報を格納
     const settings = {
@@ -57,53 +57,46 @@ $(function() {
       //メッセージが表示されてたら消す
       $('.message').remove();
       //変数indexに取得したデータのitemsを格納
-      let index = data[0].items;
-      //===void 0　==null　でもできるらしい。一般的によくtypeof　が利用されているもよう
+      const bookInfo = data[0].items;
+      /*===void 0　==null　でもできるらしい。一般的によくtypeof　が利用されているもよう
+      →訂正、どれかひとつにした場合に少しでも条件に合わないとメッセージが出てこなくなってしまったため、または||、で条件を追加しました*/
       //もし検索結果がなかったら
-      if (typeof index === "undefined") {
+      if (typeof bookInfo === undefined || bookInfo === void 0 || bookInfo == null) {
         //ないよってお知らせする、変数letに表示するHTMLを格納
         let mes = '<div class = "message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>'
         //クラスlistsのulの前に変数mesに格納された内容を追加
         $('.lists').before(mes);
         //検索結果があったら～
       } else {
-        //ちょっとまって、ループ処理制御追加、配列番号を取得し、それぞれの配列に対して処理するよ
-        for (let i = 0; i < index.length; i++) {
-          //もし配列が20こに達したら
-          if (i == 20) {
-            //処理をやめようね（※これやらなかったら検索結果が20倍になって返ってきた・・・）
-            break;
-          }
-        }
         //変数indexのそれぞれのオブジェクトに対して繰り返し処理
-        $.each(index, function(i) {
+        $.each(bookInfo, function(i) {
           //変数booksに追加するHTMLを格納、まずはタイトル
-          let books = '<li class = "lists-item"><div class = "list-inner"><p>タイトル：' + index[i].title +
+          let books = '<li class = "lists-item"><div class = "list-inner"><p>タイトル：' + bookInfo[i].title +
           //お次は作者
-          '</p><p>作者：' + index[i]["dc:creator"] +
+          '</p><p>作者：' + bookInfo[i]["dc:creator"] +
           //そして出版社
-          '</p><p>出版社：' + index[i]["dc:publisher"] +
+          '</p><p>出版社：' + bookInfo[i]["dc:publisher"] +
           //最後は書籍情報のリンク
-          '</p><a href="' + index[i].link["@id"] +
+          '</p><a href="' + bookInfo[i].link["@id"] +
           //別ページで開くようにblankで設定
           '" target="_blank">書籍情報</a></div></li>';
           //クラス.listsのulの中にbooksに格納したHTMLを追加
           $('.lists').prepend(books);
           //この項目は特におそざきエンジニアさんのYouTubeを参考にしました
           //もしtitleの値がundefindedだったら
-          if (typeof index[i].title === "undefined") {
+          if (typeof bookInfo[i].title === "undefined") {
             //タイトル：（不明）と表示
-            index[i].title = "（不明）";
+            bookInfo[i].title = "（不明）";
           }
           //もしのdc:creator値がundefindedだったら
-          if (typeof index[i]["dc:creator"] === "undefined") {
+          if (typeof bookInfo[i]["dc:creator"] === "undefined") {
             //作者：（不明）と表示
-            index[i]["dc:creator"] = "（不明）";
+            bookInfo[i]["dc:creator"] = "（不明）";
           }
           //もしのdc:publisher値がundefindedだったら
-          if (typeof index[i]["dc:publisher"] === "undefined") {
+          if (typeof bookInfo[i]["dc:publisher"] === "undefined") {
             //出版社：（不明）と表示
-            index[i]["dc:publisher"] = "（不明）";
+            bookInfo[i]["dc:publisher"] = "（不明）";
           }
         })
       }
