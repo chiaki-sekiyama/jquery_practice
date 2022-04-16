@@ -59,45 +59,40 @@ $(function() {
       //変数indexに取得したデータのitemsを格納
       const bookInfo = data[0].items;
       /*===void 0　==null　でもできるらしい。一般的によくtypeof　が利用されているもよう
-      →訂正、どれかひとつにした場合に少しでも条件に合わないとメッセージが出てこなくなってしまったため、または||、で条件を追加しました*/
+      →訂正、どれかひとつにした場合に少しでも条件に合わないとメッセージが出てこなくなってしまったため、または||、で条件を追加しました
+      →訂正２、！bookInfo*/
       //もし検索結果がなかったら
-      if (typeof bookInfo === undefined || bookInfo === void 0 || bookInfo == null) {
+      if (!bookInfo) {
         //ないよってお知らせする、変数letに表示するHTMLを格納
-        let mes = '<div class = "message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>'
+        const mes = '<div class = "message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>'
         //クラスlistsのulの前に変数mesに格納された内容を追加
         $('.lists').before(mes);
         //検索結果があったら～
       } else {
         //変数indexのそれぞれのオブジェクトに対して繰り返し処理
         $.each(bookInfo, function(i) {
-          //変数booksに追加するHTMLを格納、まずはタイトル
-          let books = '<li class = "lists-item"><div class = "list-inner"><p>タイトル：' + bookInfo[i].title +
-          //お次は作者
-          '</p><p>作者：' + bookInfo[i]["dc:creator"] +
-          //そして出版社
-          '</p><p>出版社：' + bookInfo[i]["dc:publisher"] +
+          //検索結果の本の作者を変数bookTitleへ代入
+          let bookTitle = data[0].items[i].title;
+          //検索結果の作者を変数creatorへ代入
+          let creator = data[0].items[i]["dc:creator"];
+          //検索結果の出版社を変数publisherへ代入
+          let publisher = data[0].items[i]["dc:publisher"];
+          //検索結果の書籍のサイトリンクを変数bookLinkへ代入
+          const bookLink = data[0].items[i].link["@id"];
+          //この項目は特におそざきエンジニアさんのYouTubeを参考にしました
+          //訂正、変数へ代入し、三項演算子で処理
+          //変数booksに追加するHTMLを格納、まずはタイトル　訂正→三項演算子へ　titleの値がなかった場合に　タイトル：（不明）と表示
+          const books = '<li class = "lists-item"><div class = "list-inner"><p>タイトル：' + (!bookTitle ? "（不明）" : bookTitle) +
+          //お次は作者　dc:creatorの値がなかった場合に　作者：（不明）と表示
+          '</p><p>作者：' + (!creator ? "（不明）" : creator) +
+          //そして出版社　dc:publisherの値がなかった場合に　出版社：（不明）と表示
+          '</p><p>出版社：' + (!publisher ? "（不明）" : publisher) +
           //最後は書籍情報のリンク
-          '</p><a href="' + bookInfo[i].link["@id"] +
+          '</p><a href="' + bookLink +
           //別ページで開くようにblankで設定
           '" target="_blank">書籍情報</a></div></li>';
           //クラス.listsのulの中にbooksに格納したHTMLを追加
           $('.lists').prepend(books);
-          //この項目は特におそざきエンジニアさんのYouTubeを参考にしました
-          //もしtitleの値がundefindedだったら
-          if (typeof bookInfo[i].title === "undefined") {
-            //タイトル：（不明）と表示
-            bookInfo[i].title = "（不明）";
-          }
-          //もしのdc:creator値がundefindedだったら
-          if (typeof bookInfo[i]["dc:creator"] === "undefined") {
-            //作者：（不明）と表示
-            bookInfo[i]["dc:creator"] = "（不明）";
-          }
-          //もしのdc:publisher値がundefindedだったら
-          if (typeof bookInfo[i]["dc:publisher"] === "undefined") {
-            //出版社：（不明）と表示
-            bookInfo[i]["dc:publisher"] = "（不明）";
-          }
         })
       }
     }
@@ -109,13 +104,13 @@ $(function() {
       //メッセージが表示されてたら消去
       $('.message').remove();
       //変数statusにエラーステータスを格納
-      let status = error.status;
+      const status = error.status;
       //変数disconnectedに、通信環境がない時or何も入力されていなかった時に表示されるHTMLを格納
-      let disconnected = '<div class = "message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>';
+      const disconnected = '<div class = "message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>';
       //変数badRequestリクエストエラーが発生したときに表示される文字列（HTTPエラー400番台を想定）を格納
-      let badRequest = '<div class = "message">エラーが発生しました。<br>このページは正常に動作していません。</div>';
+      const badRequest = '<div class = "message">エラーが発生しました。<br>このページは正常に動作していません。</div>';
       //変数serverErrorサーバーエラーが発生したときに表示される文字列（HTTPエラー500番台を想定、その他だけど一応）を格納
-      let serverError = '<div class = "message">サーバ側でエラーが発生しました。<br>時間をおいて接続しなおしてください。</div>';
+      const serverError = '<div class = "message">サーバ側でエラーが発生しました。<br>時間をおいて接続しなおしてください。</div>';
       //エラーだぴょーんって書く
       //もしステータスが0だったら
       if (status === 0) {
