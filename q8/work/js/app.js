@@ -72,21 +72,21 @@ $(function() {
         //変数indexのそれぞれのオブジェクトに対して繰り返し処理
         $.each(bookInfo, function(i) {
           //検索結果の本の作者を変数bookTitleへ代入
-          let bookTitle = data[0].items[i].title;
+          let bookTitle = data[0].items[i].title ? data[0].items[i].title : "（不明）";
           //検索結果の作者を変数creatorへ代入
-          let creator = data[0].items[i]["dc:creator"];
+          let creator = data[0].items[i]["dc:creator"] ? data[0].items[i]["dc:creator"] : "（不明）";
           //検索結果の出版社を変数publisherへ代入
-          let publisher = data[0].items[i]["dc:publisher"];
+          let publisher = data[0].items[i]["dc:publisher"] ? data[0].items[i]["dc:publisher"] : "（不明）";
           //検索結果の書籍のサイトリンクを変数bookLinkへ代入
           const bookLink = data[0].items[i].link["@id"];
           //この項目は特におそざきエンジニアさんのYouTubeを参考にしました
           //訂正、変数へ代入し、三項演算子で処理
           //変数booksに追加するHTMLを格納、まずはタイトル　訂正→三項演算子へ　titleの値がなかった場合に　タイトル：（不明）と表示
-          const books = '<li class = "lists-item"><div class = "list-inner"><p>タイトル：' + (!bookTitle ? "（不明）" : bookTitle) +
+          const books = '<li class = "lists-item"><div class = "list-inner"><p>タイトル：' + bookTitle +
           //お次は作者　dc:creatorの値がなかった場合に　作者：（不明）と表示
-          '</p><p>作者：' + (!creator ? "（不明）" : creator) +
+          '</p><p>作者：' + creator +
           //そして出版社　dc:publisherの値がなかった場合に　出版社：（不明）と表示
-          '</p><p>出版社：' + (!publisher ? "（不明）" : publisher) +
+          '</p><p>出版社：' + publisher +
           //最後は書籍情報のリンク
           '</p><a href="' + bookLink +
           //別ページで開くようにblankで設定
@@ -107,17 +107,17 @@ $(function() {
       const status = error.status;
       //変数disconnectedに、通信環境がない時or何も入力されていなかった時に表示されるHTMLを格納
       const disconnected = '<div class = "message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>';
-      //変数badRequestリクエストエラーが発生したときに表示される文字列（HTTPエラー400番台を想定）を格納
+      //変数badRequestリクエストエラーが発生したときに表示される文字列（HTTPエラー400場合）を格納
       const badRequest = '<div class = "message">エラーが発生しました。<br>このページは正常に動作していません。</div>';
-      //変数serverErrorサーバーエラーが発生したときに表示される文字列（HTTPエラー500番台を想定、その他だけど一応）を格納
+      //変数serverErrorサーバーエラーが発生したときに表示される文字列（その他エラーの場合）を格納
       const serverError = '<div class = "message">サーバ側でエラーが発生しました。<br>時間をおいて接続しなおしてください。</div>';
       //エラーだぴょーんって書く
       //もしステータスが0だったら
       if (status === 0) {
         //クラスlistsのulの前に変数disconnectedに格納されたHTMLを追加
         $('.lists').before(disconnected);
-        //もしステータスが400番台だったら
-      } else if (status >= 400 && status < 500) {
+        //もしステータスが400番だったら（デベロッパツールのネットワークでステータスコード赤丸400でしたので）
+      } else if (status === 400) {
         //クラスlistsのulの前に変数badRequestに格納されたHTMLを追加
         $('.lists').before(badRequest);
         //それ以外なら
